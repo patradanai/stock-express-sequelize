@@ -8,6 +8,7 @@ const sequelize = new Sequelize.Sequelize({
 });
 let db: any = {};
 
+// Add Model in db
 fs.readdirSync(__dirname)
   .filter((file) => file != "index.ts")
   .forEach((file) => {
@@ -15,6 +16,7 @@ fs.readdirSync(__dirname)
     db[model.name] = model;
   });
 
+// Init Associate
 Object.keys(db).forEach((model) => {
   if (db[model].associate) {
     db[model].associate(db);
