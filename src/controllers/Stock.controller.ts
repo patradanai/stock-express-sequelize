@@ -3,19 +3,24 @@ import db from "../models";
 const Supplier = db.Supplier;
 const Product = db.Product;
 
-// STOCK API
+// Supplier API
+
+// Read Supplier
+const readSupplier = async (req: Request, res: Response) => {};
 
 // Create Supplier
 const createSupplier = async (req: Request, res: Response) => {
   const { supplier, phone, email } = req.body;
 
+  // Check JSON Valid
   if (!supplier || !phone || !email) {
     return res.status(400).json({ message: "Message Invalid" });
   }
 
+  // Create if supplier not existing
   const [resSupllier, created] = await Supplier.findOrCreate({
     where: { supplier: supplier },
-    default: { supplier: supplier, phone: phone, email: email },
+    defaults: { supplier: supplier, phone: phone, email: email },
   });
 
   if (!resSupllier) {
@@ -25,8 +30,14 @@ const createSupplier = async (req: Request, res: Response) => {
   if (created) {
     return res.status(200).json({ message: "Create Completed" });
   } else {
-    return res.status(200).json({ message: "Supplier Existing" });
+    return res.status(400).json({ message: "Supplier Existing" });
   }
 };
 
-export { createSupplier };
+// Update
+const updateSupplier = async (req: Request, res: Response) => {};
+
+// Delete
+const deleteSupplier = async (req: Request, res: Response) => {};
+
+export { createSupplier, readSupplier, updateSupplier, deleteSupplier };
