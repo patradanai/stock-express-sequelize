@@ -13,6 +13,7 @@ module.exports = (sequelize, Sequelize) => {
     Product.belongsTo(models.Supplier);
     Product.hasMany(models.OrderProduct);
     Product.hasOne(models.Stock);
+    Product.belongsTo(models.User);
   };
 
   return Product;

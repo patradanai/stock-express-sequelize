@@ -12,6 +12,12 @@ module.exports = (sequelize, Sequelize) => {
   );
   User.associate = (models) => {
     User.belongsToMany(models.Role, { through: "user_roles" });
+    User.hasMany(models.Product);
+    User.hasMany(models.Supplier);
+    User.hasMany(models.StockTransaction);
+    User.hasMany(models.StockPlace);
+    User.hasMany(models.Supplier);
+    User.hasMany(models.OrderProduct);
   };
 
   return User;

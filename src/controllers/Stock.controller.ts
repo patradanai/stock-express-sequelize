@@ -43,6 +43,11 @@ const updateSupplier = (req: Request, res: Response) => {
   const { supplier, phone, email } = req.body;
   const { id } = req.params;
 
+  // Check JSON Valid
+  if (!supplier || !phone || !email) {
+    return res.status(400).json({ message: "Message Invalid" });
+  }
+
   Supplier.findByPk(id).then(async (resSup) => {
     await resSup.update({ supplier: supplier, phone: phone, email: email });
     return res.status(200).json({ message: "Update Completed" });

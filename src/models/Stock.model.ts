@@ -13,6 +13,7 @@ module.exports = (sequelize, Sequelize) => {
   Stock.associate = (models) => {
     Stock.belongsTo(models.Product);
     Stock.belongsTo(models.StockPlace);
+    Stock.belongsTo(models.User);
     Stock.hasMany(models.StockTransaction);
   };
   return Stock;

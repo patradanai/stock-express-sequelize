@@ -10,6 +10,7 @@ module.exports = (sequelize, Sequelize) => {
   OrderProduct.associate = (models) => {
     OrderProduct.belongsTo(models.Product);
     OrderProduct.belongsTo(models.StatusOrder);
+    OrderProduct.belongsTo(models.User);
   };
   return OrderProduct;
 };

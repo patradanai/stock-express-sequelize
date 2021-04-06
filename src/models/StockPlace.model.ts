@@ -9,6 +9,7 @@ module.exports = (sequelize, Sequelize) => {
 
   StockPlace.associate = (models) => {
     StockPlace.hasMany(models.Stock);
+    StockPlace.belongsTo(models.User);
   };
   return StockPlace;
 };

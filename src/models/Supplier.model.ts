@@ -11,6 +11,7 @@ module.exports = (sequelize, Sequelize) => {
 
   Supplier.associate = (models) => {
     Supplier.hasMany(models.Product);
+    Supplier.belongsTo(models.User);
   };
   return Supplier;
 };
