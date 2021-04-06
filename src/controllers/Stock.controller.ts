@@ -6,7 +6,11 @@ const Product = db.Product;
 // Supplier API
 
 // Read Supplier
-const readSupplier = async (req: Request, res: Response) => {};
+const readSupplier = async (req: Request, res: Response) => {
+  const resRead = await Supplier.findAll();
+
+  return res.status(200).json(resRead);
+};
 
 // Create Supplier
 const createSupplier = async (req: Request, res: Response) => {
@@ -35,9 +39,26 @@ const createSupplier = async (req: Request, res: Response) => {
 };
 
 // Update
-const updateSupplier = async (req: Request, res: Response) => {};
+const updateSupplier = (req: Request, res: Response) => {
+  const { supplier, phone, email } = req.body;
+  const { id } = req.params;
+
+  Supplier.findByPk(id).then(async (resSup) => {
+    await resSup.update({ supplier: supplier, phone: phone, email: email });
+    return res.status(200).json({ message: "Update Completed" });
+  });
+};
 
 // Delete
-const deleteSupplier = async (req: Request, res: Response) => {};
+const deleteSupplier = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const resDel = await Supplier.destroy({ where: { id: id } });
+  if (resDel) {
+    return res.status(200).json({ message: "Already destroy" });
+  } else {
+    return res.status(400).json({ message: "Can not destroy" });
+  }
+};
 
 export { createSupplier, readSupplier, updateSupplier, deleteSupplier };
