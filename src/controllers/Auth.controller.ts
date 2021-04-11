@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import db from "../models";
 import bcrypt from "bcrypt";
 import { encodeSession } from "../functions/_jwt";
+import { User } from "../types/User";
 const User = db.User;
 const Role = db.Role;
 
@@ -38,7 +39,7 @@ const SignUp = async (req: Request, res: Response) => {
 
   // Hashing Password and Create to DB
   const hashedPassword = bcrypt.hashSync(password, 10);
-  const userCrate = await User.create({
+  const userCrate: User = await User.create({
     fname: fName,
     lname: lName,
     email: email,
