@@ -3,12 +3,21 @@ const Product = db.Product;
 
 // CRUD
 
-const readProducts = (req, res) => {};
+const readProducts = (req: Request, res: Response) => {};
 
-const createProduct = (req, res) => {};
+const createProduct = (req: Request, res: Response) => {
+  const {
+    product,
+    productDesc,
+    productPrice,
+    isActive,
+    supplierId,
+    userId,
+  } = req.body;
+};
 
-const updateProduct = (req, res) => {};
+const updateProduct = (req: Request, res: Response) => {};
 
-const deleteProduct = (req, res) => {};
+const deleteProduct = (req: Request, res: Response) => {};
 
 export { readProducts, createProduct, updateProduct, deleteProduct };

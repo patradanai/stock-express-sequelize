@@ -3,12 +3,12 @@ const Stock = db.Stock;
 
 // CRUD
 
-const readStocks = (req, res) => {};
+const readStocks = (req: Request, res: Response) => {};
 
-const createStock = (req, res) => {};
+const createStock = (req: Request, res: Response) => {};
 
-const updateStock = (req, res) => {};
+const updateStock = (req: Request, res: Response) => {};
 
-const deleteStock = (req, res) => {};
+const deleteStock = (req: Request, res: Response) => {};
 
 export { readStocks, createStock, updateStock, deleteStock };

@@ -3,13 +3,13 @@ const Product = db.Product;
 
 // CRUD
 
-const readStockTransactions = (req, res) => {};
+const readStockTransactions = (req: Request, res: Response) => {};
 
-const createStockTransaction = (req, res) => {};
+const createStockTransaction = (req: Request, res: Response) => {};
 
-const updateStockTransaction = (req, res) => {};
+const updateStockTransaction = (req: Request, res: Response) => {};
 
-const deleteStockTransaction = (req, res) => {};
+const deleteStockTransaction = (req: Request, res: Response) => {};
 
 export {
   readStockTransactions,
