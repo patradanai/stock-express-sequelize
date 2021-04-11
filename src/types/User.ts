@@ -5,3 +5,7 @@ export interface User {
   password: string;
   nicename: string;
 }
+
+export interface ResUser extends Request {
+  userId: number;
+}
