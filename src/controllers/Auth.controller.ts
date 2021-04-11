@@ -1,10 +1,31 @@
 import { Request, Response } from "express";
 import db from "../models";
 import bcrypt from "bcrypt";
+import { encodeSession } from "../functions/_jwt";
 const User = db.User;
 const Role = db.Role;
 
-const SignIn = (req: Request, res: Response) => {};
+const SignIn = async (req: Request, res: Response) => {
+  const { username, password } = req.body;
+
+  // Find User in Db
+  const userFind = await User.findOne({ where: { username: username } });
+  if (!userFind) {
+    return res.status(400).json({ message: "Invalid Username or Password" });
+  }
+
+  const comparedPassword = bcrypt.compareSync(password, userFind.password);
+  if (!comparedPassword) {
+    return res.status(400).json({ message: "Password incorrect" });
+  }
+
+  const jwtGen = encodeSession(process.env.SECRET_KEY, {
+    id: userFind.id,
+    name: userFind.usernames,
+  });
+
+  return res.status(200).json(jwtGen);
+};
 
 const SignUp = async (req: Request, res: Response) => {
   const { username, password, fName, lName, email } = req.body;
