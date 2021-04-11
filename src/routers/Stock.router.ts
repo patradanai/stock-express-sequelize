@@ -4,7 +4,7 @@ import {
   readSupplier,
   deleteSupplier,
   updateSupplier,
-} from "../controllers/Stock.controller";
+} from "../controllers/Supplier.controller";
 const router = express.Router();
 
 // CRUD

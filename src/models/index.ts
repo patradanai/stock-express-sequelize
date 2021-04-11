@@ -4,7 +4,7 @@ import fs from "fs";
 
 const sequelize = new Sequelize.Sequelize({
   dialect: "sqlite",
-  storage: "/home/patradanai/stock.sqlite",
+  storage: "stock.sqlite",
 });
 let db: any = {};
 
