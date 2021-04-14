@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { decode } from "jsonwebtoken";
 
 interface encode {
   (secretKey: string, data: { id: number; name: string }): string;
@@ -17,7 +17,11 @@ export const encodeSession: encode = (secretKey, data) => {
 };
 
 export const decodeSession: decode = (secretKey, jwtClient) => {
-  const decode = jwt.verify(jwtClient, secretKey);
+  return jwt.verify(jwtClient, secretKey, (err, decode) => {
+    if (err) {
+      return false;
+    }
 
-  return decode;
+    return decode;
+  });
 };

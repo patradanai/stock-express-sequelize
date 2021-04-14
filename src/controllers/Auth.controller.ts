@@ -22,7 +22,7 @@ const SignIn = async (req: Request, res: Response) => {
 
   const jwtGen = encodeSession(process.env.SECRET_KEY, {
     id: userFind.id,
-    name: userFind.usernames,
+    name: userFind.nicename,
   });
 
   return res.status(200).json(jwtGen);

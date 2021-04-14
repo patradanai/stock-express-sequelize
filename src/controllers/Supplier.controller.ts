@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ResUser } from "../types/User";
 import db from "../models";
 const Supplier = db.Supplier;
+const User = db.User;
 
 // Supplier API
 
@@ -34,8 +35,12 @@ const createSupplier = async (req: ResUser, res: Response) => {
   if (!resSupllier) {
     return res.status(400).json({ message: "Create not Completed" });
   }
-  // Set UserId is PK
-  await resSupllier.setUser([userId]);
+  // Set UserId is Instance
+  const userInstance = await User.findByPk(userId);
+  if (!userInstance) {
+    return res.status(400).json({ message: "UserId not found in DB" });
+  }
+  await resSupllier.setUser(userInstance);
 
   if (created) {
     return res.status(200).json({ message: "Create Completed" });

@@ -19,23 +19,29 @@ const createProduct = async (req: ResUser, res: Response) => {
   const id = req.userId;
   const { product, productDesc, productPrice, isActive, supplierId } = req.body;
 
-  // Find User
-  const userInstance = await User.findByPk(id);
+  try {
+    // Find User
+    const userInstance = await User.findByPk(id);
 
-  // Find Supplier
-  const supplierInstance = await Supplier.findByPk(supplierId);
+    // Find Supplier
+    const supplierInstance = await Supplier.findByPk(supplierId);
 
-  const productCreate = await Product.create({
-    product: product,
-    productPrice: productPrice,
-    productDesc: productDesc,
-    isActive: isActive,
-  });
-  if (!productCreate) {
-    return res.status(400).json({ message: "Create product not completed" });
+    const productCreate = await Product.create({
+      product: product,
+      productPrice: productPrice,
+      productDesc: productDesc,
+      isActive: isActive,
+      UserId: userInstance.id,
+      SupplierId: supplierInstance.id,
+    });
+    if (!productCreate) {
+      return res.status(400).json({ message: "Create product not completed" });
+    }
+  } catch (err) {
+    return res.status(500).json({ Error: err.message });
   }
-  await productCreate.setUsers(userInstance);
-  await productCreate.setSuppliers(supplierInstance);
+  // await productCreate.setUser(userInstance);
+  // await productCreate.setSupplier(supplierInstance);
 
   return res.status(200).json({ message: "Create product completed" });
 };

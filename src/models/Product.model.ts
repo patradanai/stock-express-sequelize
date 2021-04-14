@@ -10,10 +10,18 @@ module.exports = (sequelize, Sequelize) => {
     {}
   );
   Product.associate = (models) => {
-    Product.belongsTo(models.Supplier);
+    Product.belongsTo(models.Supplier, {
+      foreignKey: {
+        allowNull: false,
+      },
+    });
     Product.hasMany(models.OrderProduct);
     Product.hasOne(models.Stock);
-    Product.belongsTo(models.User);
+    Product.belongsTo(models.User, {
+      foreignKey: {
+        allowNull: false,
+      },
+    });
   };
 
   return Product;
