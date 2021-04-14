@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ResUser } from "../types/User";
+import { ReqUser } from "../types/User";
 import db from "../models";
 const Supplier = db.Supplier;
 const User = db.User;
@@ -7,7 +7,7 @@ const User = db.User;
 // Supplier API
 
 // Read Supplier
-const readSupplier = async (req: ResUser, res: Response) => {
+const readSupplier = async (req: ReqUser, res: Response) => {
   const userId = req.userId;
   const resRead = await Supplier.findAll({
     where: { userId: userId },
@@ -18,7 +18,7 @@ const readSupplier = async (req: ResUser, res: Response) => {
 };
 
 // Create Supplier
-const createSupplier = async (req: ResUser, res: Response) => {
+const createSupplier = async (req: ReqUser, res: Response) => {
   const userId = req.userId;
   const { supplier, phone, email } = req.body;
 
@@ -28,6 +28,12 @@ const createSupplier = async (req: ResUser, res: Response) => {
   }
 
   try {
+    // Check UserId
+    const userInstance = await User.findByPk(userId);
+    if (!userInstance) {
+      return res.status(400).json({ message: "UserId not found in DB" });
+    }
+
     // Create if supplier not existing
     const [resSupllier, created] = await Supplier.findOrCreate({
       where: { supplier: supplier },
@@ -37,10 +43,6 @@ const createSupplier = async (req: ResUser, res: Response) => {
       return res.status(400).json({ message: "Create not Completed" });
     }
     // Set UserId is Instance
-    const userInstance = await User.findByPk(userId);
-    if (!userInstance) {
-      return res.status(400).json({ message: "UserId not found in DB" });
-    }
     await resSupllier.setUser(userInstance);
 
     if (!created) {

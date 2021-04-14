@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import db from "../models";
-import { ResUser } from "../types/User";
+import { ReqUser } from "../types/User";
 const Product = db.Product;
 const User = db.User;
 const Supplier = db.Supplier;
 
 // CRUD
 
-const readProducts = async (req: ResUser, res: Response) => {
+const readProducts = async (req: ReqUser, res: Response) => {
   const id = req.userId;
 
   try {
@@ -21,7 +21,7 @@ const readProducts = async (req: ResUser, res: Response) => {
   }
 };
 
-const createProduct = async (req: ResUser, res: Response) => {
+const createProduct = async (req: ReqUser, res: Response) => {
   const id = req.userId;
   const { product, productDesc, productPrice, isActive, supplierId } = req.body;
 
@@ -50,7 +50,7 @@ const createProduct = async (req: ResUser, res: Response) => {
   }
 };
 
-const updateProduct = async (req: ResUser, res: Response) => {
+const updateProduct = async (req: ReqUser, res: Response) => {
   const userId = req.userId;
   const { id } = req.params;
   const { product, productDesc, productPrice, isActive, supplierId } = req.body;
@@ -85,7 +85,7 @@ const updateProduct = async (req: ResUser, res: Response) => {
   }
 };
 
-const deleteProduct = async (req: ResUser, res: Response) => {
+const deleteProduct = async (req: ReqUser, res: Response) => {
   const userId = req.userId;
   const { id } = req.params;
 

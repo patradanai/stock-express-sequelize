@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { ResUser } from "../types/User";
+import { ReqUser } from "../types/User";
 import db from "../models";
 const User = db.User;
 
 const checkRole = (roles: string[]) => {
-  return async (req: ResUser, res: Response, next: NextFunction) => {
+  return async (req: ReqUser, res: Response, next: NextFunction) => {
     const id = req.userId;
 
     const userCB = await User.findByPk({ id, include: "Role" });

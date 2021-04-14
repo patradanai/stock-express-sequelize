@@ -16,6 +16,6 @@ export interface Product {
   userId: number;
 }
 
-export interface ResUser extends Request {
+export interface ReqUser extends Request {
   userId: number;
 }

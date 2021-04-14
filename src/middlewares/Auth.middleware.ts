@@ -1,19 +1,19 @@
 import { Request, Response, NextFunction } from "express";
 import db from "../models";
 import { decodeSession } from "../functions/_jwt";
-import { ResUser } from "../types/User";
+import { ReqUser } from "../types/User";
 const User = db.User;
 
 const isExistUser = async (req: Request, res: Response, next: NextFunction) => {
   const { username } = req.body;
-  const resUser = await User.findOne({ username: username });
-  if (!resUser) {
+  const reqUser = await User.findOne({ username: username });
+  if (!reqUser) {
     return res.status(400).json({ message: "User exsting" });
   }
   next();
 };
 
-const isAuthorization = (req: ResUser, res: Response, next: NextFunction) => {
+const isAuthorization = (req: ReqUser, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
 
   // Check authorization valid
