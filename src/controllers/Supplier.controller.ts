@@ -27,25 +27,28 @@ const createSupplier = async (req: ResUser, res: Response) => {
     return res.status(400).json({ message: "Message Invalid" });
   }
 
-  // Create if supplier not existing
-  const [resSupllier, created] = await Supplier.findOrCreate({
-    where: { supplier: supplier },
-    defaults: { supplier: supplier, phone: phone, email: email },
-  });
-  if (!resSupllier) {
-    return res.status(400).json({ message: "Create not Completed" });
-  }
-  // Set UserId is Instance
-  const userInstance = await User.findByPk(userId);
-  if (!userInstance) {
-    return res.status(400).json({ message: "UserId not found in DB" });
-  }
-  await resSupllier.setUser(userInstance);
+  try {
+    // Create if supplier not existing
+    const [resSupllier, created] = await Supplier.findOrCreate({
+      where: { supplier: supplier },
+      defaults: { supplier: supplier, phone: phone, email: email },
+    });
+    if (!resSupllier) {
+      return res.status(400).json({ message: "Create not Completed" });
+    }
+    // Set UserId is Instance
+    const userInstance = await User.findByPk(userId);
+    if (!userInstance) {
+      return res.status(400).json({ message: "UserId not found in DB" });
+    }
+    await resSupllier.setUser(userInstance);
 
-  if (created) {
+    if (!created) {
+      return res.status(400).json({ message: "Supplier Existing" });
+    }
     return res.status(200).json({ message: "Create Completed" });
-  } else {
-    return res.status(400).json({ message: "Supplier Existing" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -59,21 +62,28 @@ const updateSupplier = (req: Request, res: Response) => {
     return res.status(400).json({ message: "Message Invalid" });
   }
 
-  Supplier.findByPk(id).then(async (resSup) => {
-    await resSup.update({ supplier: supplier, phone: phone, email: email });
-    return res.status(200).json({ message: "Update Completed" });
-  });
+  try {
+    Supplier.findByPk(id).then(async (resSup) => {
+      await resSup.update({ supplier: supplier, phone: phone, email: email });
+      return res.status(200).json({ message: "Update Completed" });
+    });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
 };
 
 // Delete
 const deleteSupplier = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const resDel = await Supplier.destroy({ where: { id: id } });
-  if (resDel) {
+  try {
+    const resDel = await Supplier.destroy({ where: { id: id } });
+    if (!resDel) {
+      return res.status(400).json({ message: "Can not destroy" });
+    }
     return res.status(200).json({ message: "Already destroy" });
-  } else {
-    return res.status(400).json({ message: "Can not destroy" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
   }
 };
 

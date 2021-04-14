@@ -10,9 +10,15 @@ const Supplier = db.Supplier;
 const readProducts = async (req: ResUser, res: Response) => {
   const id = req.userId;
 
-  const products = await Product.findAll({ where: { userid: id } });
-
-  return res.status(200).json({ data: products });
+  try {
+    const products = await Product.findAll({
+      where: { userid: id },
+      include: [User, Supplier],
+    });
+    return res.status(200).json({ data: products });
+  } catch (err) {
+    return res.status(500).json({ Error: err.message });
+  }
 };
 
 const createProduct = async (req: ResUser, res: Response) => {
@@ -37,13 +43,11 @@ const createProduct = async (req: ResUser, res: Response) => {
     if (!productCreate) {
       return res.status(400).json({ message: "Create product not completed" });
     }
+
+    return res.status(200).json({ message: "Create product completed" });
   } catch (err) {
     return res.status(500).json({ Error: err.message });
   }
-  // await productCreate.setUser(userInstance);
-  // await productCreate.setSupplier(supplierInstance);
-
-  return res.status(200).json({ message: "Create product completed" });
 };
 
 const updateProduct = async (req: ResUser, res: Response) => {
@@ -51,9 +55,15 @@ const updateProduct = async (req: ResUser, res: Response) => {
   const { id } = req.params;
   const { product, productDesc, productPrice, isActive, supplierId } = req.body;
 
-  const productUpdate = await Product.findByPk(id);
-  if (productUpdate.userId != userId) {
-    return res.status(401).json({ message: "Authorization for this product" });
+  try {
+    const productUpdate = await Product.findByPk(id);
+    if (productUpdate.userId != userId) {
+      return res
+        .status(401)
+        .json({ message: "Authorization for this product" });
+    }
+  } catch (err) {
+    return res.status(500).json({ Error: err.message });
   }
 };
 
