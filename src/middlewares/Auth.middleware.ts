@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import db from "../models";
 import { decodeSession } from "../functions/_jwt";
+import { ResUser } from "../types/User";
 const User = db.User;
 
 const isExistUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -12,7 +13,7 @@ const isExistUser = async (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-const isAuthorization = (req: Request, res: Response, next: NextFunction) => {
+const isAuthorization = (req: ResUser, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
 
   // Check authorization valid
@@ -34,6 +35,7 @@ const isAuthorization = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({ message: "Expried Token" });
   }
 
+  req.userId = verifyToken?.id;
   next();
 };
 

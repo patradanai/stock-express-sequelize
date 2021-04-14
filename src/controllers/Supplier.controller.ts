@@ -1,18 +1,24 @@
 import { Request, Response } from "express";
+import { ResUser } from "../types/User";
 import db from "../models";
 const Supplier = db.Supplier;
 
 // Supplier API
 
 // Read Supplier
-const readSupplier = async (req: Request, res: Response) => {
-  const resRead = await Supplier.findAll();
+const readSupplier = async (req: ResUser, res: Response) => {
+  const userId = req.userId;
+  const resRead = await Supplier.findAll({
+    where: { userId: userId },
+    include: [db.User],
+  });
 
   return res.status(200).json(resRead);
 };
 
 // Create Supplier
-const createSupplier = async (req: Request, res: Response) => {
+const createSupplier = async (req: ResUser, res: Response) => {
+  const userId = req.userId;
   const { supplier, phone, email } = req.body;
 
   // Check JSON Valid
@@ -25,10 +31,11 @@ const createSupplier = async (req: Request, res: Response) => {
     where: { supplier: supplier },
     defaults: { supplier: supplier, phone: phone, email: email },
   });
-
   if (!resSupllier) {
     return res.status(400).json({ message: "Create not Completed" });
   }
+  // Set UserId is PK
+  await resSupllier.setUser([userId]);
 
   if (created) {
     return res.status(200).json({ message: "Create Completed" });

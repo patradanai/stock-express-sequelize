@@ -5,9 +5,13 @@ import {
   deleteSupplier,
   updateSupplier,
 } from "../controllers/Supplier.controller";
+import { isAuthorization } from "../middlewares/Auth.middleware";
 const router = express.Router();
 
 // CRUD
+
+// Middleware
+router.use(isAuthorization);
 
 // Example localhost:3000/stock/supplier
 router.post("/supplier", createSupplier);

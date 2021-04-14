@@ -29,22 +29,23 @@ const SignIn = async (req: Request, res: Response) => {
 };
 
 const SignUp = async (req: Request, res: Response) => {
-  const { username, password, fName, lName, email } = req.body;
+  const { username, password, firstname, lastname, email } = req.body;
 
   // Find User in Db
   const userFind = await User.findOne({ where: { username: username } });
-  if (!userFind) {
+  if (userFind) {
     return res.status(400).json({ message: "User Existing" });
   }
 
   // Hashing Password and Create to DB
   const hashedPassword = bcrypt.hashSync(password, 10);
-  const userCrate: User = await User.create({
-    fname: fName,
-    lname: lName,
+  const userCrate = await User.create({
+    username: username,
+    firstname: firstname,
+    lastname: lastname,
     email: email,
     password: hashedPassword,
-    nicename: fName + lName,
+    nicename: firstname + lastname,
   });
   if (!userCrate) {
     return res.status(400).json({ message: "Register not Complete" });
