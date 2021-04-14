@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import db from "./src/models";
-import Stock from "./src/routers/Stock.router";
+import Stock from "./src/routers/Supplier.router";
+import Product from "./src/routers/Product.router";
 import Auth from "./src/routers/Auth.router";
 import cors from "cors";
 
@@ -37,6 +38,7 @@ app.get("/", (req, res) => {
 });
 app.use("/stock", Stock);
 app.use("/auth", Auth);
+app.use("/stock", Product);
 
 app.listen(PORT, () => {
   console.log(`Running Server on ${PORT}`);
