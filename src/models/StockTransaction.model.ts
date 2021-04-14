@@ -8,9 +8,16 @@ module.exports = (sequelize, Sequelize) => {
   );
 
   StockTransaction.associate = (models) => {
-    StockTransaction.belongsTo(models.Stock);
-    StockTransaction.belongsTo(models.StockTransactionType);
-    StockTransaction.belongsTo(models.User);
+    StockTransaction.belongsTo(models.Stock, {
+      foreignKey: {
+        allowNull: false,
+      },
+    });
+    StockTransaction.belongsTo(models.StockTransactionType, {
+      foreignKey: {
+        allowNull: false,
+      },
+    });
   };
   return StockTransaction;
 };
