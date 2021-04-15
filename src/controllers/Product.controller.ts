@@ -4,7 +4,7 @@ import { ReqUser } from "../types/User";
 const Product = db.Product;
 const User = db.User;
 const Supplier = db.Supplier;
-
+const Stock = db.Stock;
 // CRUD
 
 const readProducts = async (req: ReqUser, res: Response) => {
@@ -13,7 +13,7 @@ const readProducts = async (req: ReqUser, res: Response) => {
   try {
     const products = await Product.findAll({
       where: { userid: id },
-      include: [User, Supplier],
+      include: [User, Supplier, Stock],
     });
     return res.status(200).json({ data: products });
   } catch (err) {
@@ -23,7 +23,18 @@ const readProducts = async (req: ReqUser, res: Response) => {
 
 const createProduct = async (req: ReqUser, res: Response) => {
   const id = req.userId;
-  const { product, productDesc, productPrice, isActive, supplierId } = req.body;
+  const {
+    product,
+    productDesc,
+    productPrice,
+    isActive,
+    supplierId,
+    minOrder,
+    orderQuantity,
+    isAutoOrder,
+    stockPlaceId,
+    productId,
+  } = req.body;
 
   try {
     // Find User
@@ -32,14 +43,28 @@ const createProduct = async (req: ReqUser, res: Response) => {
     // Find Supplier
     const supplierInstance = await Supplier.findByPk(supplierId);
 
-    const productCreate = await Product.create({
-      product: product,
-      productPrice: productPrice,
-      productDesc: productDesc,
-      isActive: isActive,
-      UserId: userInstance.id,
-      SupplierId: supplierInstance.id,
-    });
+    const productCreate = await Product.create(
+      {
+        product: product,
+        productPrice: productPrice,
+        productDesc: productDesc,
+        isActive: isActive,
+        UserId: userInstance.id,
+        SupplierId: supplierInstance.id,
+        Stock: {
+          UserId: userInstance.id,
+          minOrder: minOrder,
+          orderQuantity: orderQuantity,
+          isAutoOrder: isAutoOrder,
+          ProductId: productId,
+          StockPlaceId: stockPlaceId,
+        },
+      },
+      {
+        include: [Stock],
+        as: "Stock",
+      }
+    );
     if (!productCreate) {
       return res.status(400).json({ message: "Create product not completed" });
     }

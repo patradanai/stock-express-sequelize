@@ -28,7 +28,7 @@ const createStockPlace = async (req: ReqUser, res: Response) => {
   try {
     const [stockplace, created] = await StockPlace.findOrCreate({
       where: { stockPlace: stockPlace },
-      defaults: { stockPlace: stockPlace, userId: userId },
+      defaults: { stockPlace: stockPlace, UserId: userId },
     });
     if (!stockplace) {
       return res.status(400).json({ message: "Create not Completed" });

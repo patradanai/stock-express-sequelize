@@ -2,7 +2,6 @@ module.exports = (sequelize, Sequelize) => {
   const Stock = sequelize.define(
     "Stock",
     {
-      quantity: Sequelize.INTEGER,
       minOrder: Sequelize.INTEGER,
       orderQuantity: Sequelize.INTEGER,
       isAutoOrder: Sequelize.BOOLEAN,
@@ -11,21 +10,9 @@ module.exports = (sequelize, Sequelize) => {
   );
 
   Stock.associate = (models) => {
-    Stock.belongsTo(models.Product, {
-      foreignKey: {
-        allowNull: false,
-      },
-    });
-    Stock.belongsTo(models.StockPlace, {
-      foreignKey: {
-        allowNull: false,
-      },
-    });
-    Stock.belongsTo(models.User, {
-      foreignKey: {
-        allowNull: false,
-      },
-    });
+    Stock.belongsTo(models.Product);
+    Stock.belongsTo(models.StockPlace);
+    Stock.belongsTo(models.User);
     Stock.hasMany(models.StockTransaction);
   };
   return Stock;

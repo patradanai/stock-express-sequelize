@@ -13,9 +13,14 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
     });
-    StockTransaction.belongsTo(models.StockTransactionType, {
+    StockTransaction.belongsTo(models.User, {
       foreignKey: {
         allowNull: false,
+      },
+    });
+    StockTransaction.belongsTo(models.StockTransactionType, {
+      foreignKey: {
+        allowNull: true,
       },
     });
   };

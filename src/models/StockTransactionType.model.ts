@@ -9,6 +9,7 @@ module.exports = (sequelize, Sequelize) => {
 
   StockTransactionType.associate = (models) => {
     StockTransactionType.hasMany(models.StockTransaction);
+    StockTransactionType.belongsTo(models.User);
   };
   return StockTransactionType;
 };
