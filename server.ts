@@ -14,21 +14,21 @@ app.use(cors());
 require("dotenv").config();
 
 (async () => {
-  await db.sequelize.sync();
-  // await db.Role.bulkCreate([
-  //   { role: "Administrator" },
-  //   { role: "Moderator" },
-  //   { role: "Customer" },
-  // ]);
-  // await db.StockTransactionType.bulkCreate([
-  //   { type: "StockIn" },
-  //   { type: "StockOut" },
-  // ]);
-  // await db.StatusOrder.bulkCreate([
-  //   { statusOrder: "HoldOn" },
-  //   { statusOrder: "Processed" },
-  //   { statusOrder: "Completed" },
-  // ]);
+  await db.sequelize.sync({ force: true });
+  await db.Role.bulkCreate([
+    { role: "Administrator" },
+    { role: "Moderator" },
+    { role: "Customer" },
+  ]);
+  await db.StockTransactionType.bulkCreate([
+    { type: "StockIn" },
+    { type: "StockOut" },
+  ]);
+  await db.StatusOrder.bulkCreate([
+    { statusOrder: "HoldOn" },
+    { statusOrder: "Processed" },
+    { statusOrder: "Completed" },
+  ]);
 })();
 
 // Add Router

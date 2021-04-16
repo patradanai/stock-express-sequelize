@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import db from "../models";
 import bcrypt from "bcrypt";
 import { encodeSession } from "../functions/_jwt";
-import { User } from "../types/User";
 const User = db.User;
 const Role = db.Role;
 
