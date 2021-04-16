@@ -29,7 +29,7 @@ const readStocks = async (req: ReqUser, res: Response) => {
             Sequelize.fn(
               "SUM",
               Sequelize.literal(
-                "(SELECT CASE StockTransactions.StockTransactionType.id WHEN '1' THEN StockTransactions.quantity ELSE StockTransactions.quantity*-1 END)"
+                "(CASE `StockTransactions->StockTransactionType`.`type` WHEN 'StockIn' THEN StockTransactions.quantity ELSE StockTransactions.quantity*-1 END)"
               )
             ),
             "Quantity",
