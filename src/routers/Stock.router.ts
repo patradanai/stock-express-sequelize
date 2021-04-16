@@ -67,7 +67,13 @@ router.get("/stock/:id", StockController.readStock);
  * StockTransactions Routes
  *
  * */
+router.get("/stocktransaction", StockTransaction.readStockTransactions);
+
 router.post("/stocktransaction", StockTransaction.createStockTransaction);
+
+router.put("/stocktransaction", StockTransaction.updateStockTransaction);
+
+router.delete("/stocktransaction", StockTransaction.deleteStockTransaction);
 
 /**
  *

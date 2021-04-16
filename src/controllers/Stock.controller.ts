@@ -108,7 +108,7 @@ const updateStock = async (req: ReqUser, res: Response) => {
 
   try {
     const stock = await Stock.findByPk(id);
-    if (stock.userId != userId) {
+    if (stock.UserId != userId) {
       return res
         .status(401)
         .json({ message: "UnAuthorization for This Stock" });

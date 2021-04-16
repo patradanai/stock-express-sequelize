@@ -3,9 +3,21 @@ import { ReqUser } from "../types/User";
 import db from "../models";
 const StockTransaction = db.StockTransaction;
 const StockTransactionType = db.StockTransactionType;
+
 // CRUD
 
-const readStockTransactions = (req: Request, res: Response) => {};
+const readStockTransactions = async (req: ReqUser, res: Response) => {
+  const userId = req.userId;
+
+  try {
+    const stockTransactions = await StockTransaction.findAll({
+      where: { userid: userId },
+    });
+    return res.status(200).json({ data: stockTransactions });
+  } catch (err) {
+    return res.status(500).json({ Error: err.message });
+  }
+};
 
 const createStockTransaction = async (req: ReqUser, res: Response) => {
   const userId = req.userId;
@@ -29,9 +41,51 @@ const createStockTransaction = async (req: ReqUser, res: Response) => {
   }
 };
 
-const updateStockTransaction = (req: Request, res: Response) => {};
+const updateStockTransaction = async (req: ReqUser, res: Response) => {
+  const userId = req.userId;
+  const { id } = req.params;
+  const { quantity, typeStock } = req.body;
 
-const deleteStockTransaction = (req: Request, res: Response) => {};
+  try {
+    // Check StockTransaction by Id
+    const stockTransaction = await StockTransaction.findByPk(id);
+    if (stockTransaction.UserId != userId) {
+      return res
+        .status(401)
+        .json({ message: "UnAuthorization for This Stock" });
+    }
+    // Update
+    await stockTransaction.update({ quantity: quantity });
+    const stockType = await StockTransactionType.findOne({
+      where: { type: typeStock },
+    });
+    await stockTransaction.setStockTransactionType(stockType);
+  } catch (err) {
+    return res.status(500).json({ Error: err.message });
+  }
+};
+
+const deleteStockTransaction = async (req: ReqUser, res: Response) => {
+  const userId = req.userId;
+  const { id } = req.params;
+
+  try {
+    // Check StockTransaction by Id
+    const stockTransaction = await StockTransaction.findByPk(id);
+    if (stockTransaction.UserId != userId) {
+      return res
+        .status(401)
+        .json({ message: "UnAuthorization for This Stock" });
+    }
+    // Delete StockTransaction by Id
+    await StockTransaction.destroy({ where: { id: id } });
+    return res
+      .status(200)
+      .json({ message: `Completed Deleted Transaction Id ${id}` });
+  } catch (err) {
+    return res.status(500).json({ Error: err.message });
+  }
+};
 
 export {
   readStockTransactions,
