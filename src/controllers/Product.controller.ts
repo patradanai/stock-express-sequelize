@@ -83,7 +83,7 @@ const updateProduct = async (req: ReqUser, res: Response) => {
   try {
     // Check owner Product with UserId
     const productUpdate = await Product.findByPk(id);
-    if (productUpdate.userId != userId) {
+    if (productUpdate.UserId != userId) {
       return res
         .status(401)
         .json({ message: "UnAuthorization for this product" });
@@ -117,7 +117,7 @@ const deleteProduct = async (req: ReqUser, res: Response) => {
   try {
     // Check owner Product with UserId
     const productDelete = await Product.findByPk(id);
-    if (productDelete.userId != userId) {
+    if (productDelete.UserId != userId) {
       return res
         .status(401)
         .json({ message: "UnAuthorization for this product" });

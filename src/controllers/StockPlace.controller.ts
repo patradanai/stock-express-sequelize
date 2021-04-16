@@ -56,7 +56,7 @@ const updateStockPlace = async (req: ReqUser, res: Response) => {
   try {
     // Check owner stockPlace with UserId
     const stockPlaces = await StockPlace.findByPk(id);
-    if (userId != stockPlaces.userId) {
+    if (userId != stockPlaces.UserId) {
       return res
         .status(401)
         .json({ message: `UnAuthorization Deleted Id ${id}` });
@@ -74,7 +74,7 @@ const deleteStockPlace = async (req: ReqUser, res: Response) => {
 
   try {
     const stockPlaces = await StockPlace.findByPk(id);
-    if (userId != stockPlaces.userId) {
+    if (userId != stockPlaces.UserId) {
       return res
         .status(401)
         .json({ message: `UnAuthorization Deleted Id ${id}` });

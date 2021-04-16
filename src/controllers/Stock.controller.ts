@@ -12,19 +12,14 @@ const readStock = async (req: ReqUser, res: Response) => {
   const userId = req.userId;
   const { id } = req.params;
   try {
-  } catch (err) {}
-};
-
-// Get All Stocks
-const readStocks = async (req: ReqUser, res: Response) => {
-  const userId = req.userId;
-
-  try {
-    const stocks = await Stock.findAll({
+    const stock = await Stock.findByPk(id, {
       duplicating: false,
       group: [],
       attributes: {
         include: [
+          // Notice how I referred to the attributes using the `tableNames` in backticks becuase `->` is
+          // an invalid character in an SQL query but sequelize when generating the SQL query assigns
+          // this alias to the nested included tables
           [
             Sequelize.fn(
               "SUM",
@@ -50,7 +45,57 @@ const readStocks = async (req: ReqUser, res: Response) => {
         ],
       },
     });
-    return res.status(200).json(stocks);
+    if (stock.UserId != userId) {
+      return res
+        .status(401)
+        .json({ message: `UnAuthorization with This Stock id ${id}` });
+    }
+    return res.status(200).json({ data: stock });
+  } catch (err) {
+    return res.status(500).json({ Error: err.message });
+  }
+};
+
+// Get All Stocks
+const readStocks = async (req: ReqUser, res: Response) => {
+  const userId = req.userId;
+
+  try {
+    const stocks = await Stock.findAll({
+      where: { userId: userId },
+      duplicating: false,
+      group: [],
+      attributes: {
+        include: [
+          // Notice how I referred to the attributes using the `tableNames` in backticks becuase `->` is
+          // an invalid character in an SQL query but sequelize when generating the SQL query assigns
+          // this alias to the nested included tables
+          [
+            Sequelize.fn(
+              "SUM",
+              Sequelize.literal(
+                "(CASE `StockTransactions->StockTransactionType`.`type` WHEN 'StockIn' THEN StockTransactions.quantity ELSE StockTransactions.quantity*-1 END)"
+              )
+            ),
+            "Quantity",
+          ],
+        ],
+      },
+      include: {
+        model: StockTransaction,
+        as: "StockTransactions",
+        attributes: [],
+        required: false,
+        include: [
+          {
+            model: StockTransactionType,
+            attributes: ["type"],
+            required: false,
+          },
+        ],
+      },
+    });
+    return res.status(200).json({ data: stocks });
   } catch (err) {
     return res.status(500).json({ Error: err.message });
   }
@@ -75,4 +120,4 @@ const updateStock = async (req: ReqUser, res: Response) => {
   }
 };
 
-export { readStocks, updateStock };
+export { readStocks, readStock, updateStock };

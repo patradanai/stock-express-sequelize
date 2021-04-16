@@ -59,6 +59,9 @@ router.put("/stock/:id", StockController.updateStock);
 // Example GET localhost:3000/stock/stocks
 router.get("/stocks", StockController.readStocks);
 
+// Example GET localhost:3000/stock/stock/1
+router.get("/stock/:id", StockController.readStock);
+
 /**
  *
  * StockTransactions Routes
