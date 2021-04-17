@@ -20,7 +20,7 @@ export default class Supplier extends Model {
   email: string;
 
   @ForeignKey(() => User)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   UserId: number;
 
   @BelongsTo(() => User)

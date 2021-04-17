@@ -12,25 +12,25 @@ import StockTransactionType from "./StockTransactionType.model";
 
 @Table
 export default class StockTransaction extends Model {
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   quantity: number;
 
   @ForeignKey(() => User)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   UserId: number;
 
   @BelongsTo(() => User)
   user: User;
 
   @ForeignKey(() => Stock)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   StockId: number;
 
   @BelongsTo(() => Stock)
   stock: Stock;
 
   @ForeignKey(() => StockTransactionType)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   StockTransactionTypeId: number;
 
   @BelongsTo(() => StockTransactionType)

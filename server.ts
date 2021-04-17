@@ -9,29 +9,30 @@ import cors from "cors";
 
 const PORT = process.env.PORT || 3000;
 const app: Application = express();
+const ForceDB = true;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 // Init Dotenv
-require("dotenv").config();
+require("dotenv").config({ path: __dirname + "/.env" });
 
 (async () => {
-  await sequelize.sync();
-  // await Role.bulkCreate([
-  //   { role: "Administrator" },
-  //   { role: "Moderator" },
-  //   { role: "Customer" },
-  // ]);
-  // await StockTransactionType.bulkCreate([
-  //   { type: "StockIn" },
-  //   { type: "StockOut" },
-  // ]);
-  // await StatusOrder.bulkCreate([
-  //   { statusOrder: "HoldOn" },
-  //   { statusOrder: "Processed" },
-  //   { statusOrder: "Completed" },
-  // ]);
+  await sequelize.sync({ force: ForceDB });
+  await Role.bulkCreate([
+    { role: "Administrator" },
+    { role: "Moderator" },
+    { role: "Customer" },
+  ]);
+  await StockTransactionType.bulkCreate([
+    { type: "StockIn" },
+    { type: "StockOut" },
+  ]);
+  await StatusOrder.bulkCreate([
+    { statusOrder: "HoldOn" },
+    { statusOrder: "Processed" },
+    { statusOrder: "Completed" },
+  ]);
 })();
 
 // Add Router

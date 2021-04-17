@@ -16,21 +16,21 @@ export default class OrderProduct extends Model {
   orderQuantity: string;
 
   @ForeignKey(() => User)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   UserId: number;
 
   @BelongsTo(() => User)
   user: User;
 
   @ForeignKey(() => Product)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   ProductId: number;
 
   @BelongsTo(() => Product)
   product: Product;
 
   @ForeignKey(() => StatusOrder)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   StatusOrderId: number;
 
   @BelongsTo(() => StatusOrder)

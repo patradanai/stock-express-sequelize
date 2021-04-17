@@ -1,5 +1,5 @@
 import { Response } from "express";
-import db from "../models";
+import { Op } from "sequelize";
 import { ReqUser } from "../types/User";
 import StockPlace from "../models/StockPlace.model";
 
@@ -27,7 +27,12 @@ const createStockPlace = async (req: ReqUser, res: Response) => {
 
   try {
     const [stockplace, created] = await StockPlace.findOrCreate({
-      where: { stockPlace: stockPlace },
+      where: {
+        [Op.and]: [
+          { stockPlace: { [Op.eq]: stockPlace } },
+          { userid: { [Op.eq]: userId } },
+        ],
+      },
       defaults: { stockPlace: stockPlace, UserId: userId },
     });
     if (!stockplace) {

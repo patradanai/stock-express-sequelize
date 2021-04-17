@@ -16,7 +16,7 @@ export default class StockPlace extends Model {
   stockPlace: string;
 
   @ForeignKey(() => User)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   UserId: number;
 
   @BelongsTo(() => User)

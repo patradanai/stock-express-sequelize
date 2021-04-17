@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { Request, Response } from "express";
 import { ReqUser } from "../types/User";
 import Supplier from "../models/Supplier.model";
@@ -35,9 +36,15 @@ const createSupplier = async (req: ReqUser, res: Response) => {
 
     // Create if supplier not existing
     const [resSupllier, created] = await Supplier.findOrCreate({
-      where: { supplier: supplier },
+      where: {
+        [Op.and]: [
+          { supplier: { [Op.eq]: supplier } },
+          { userid: { [Op.eq]: userId } },
+        ],
+      },
       defaults: { supplier: supplier, phone: phone, email: email },
     });
+
     if (!resSupllier) {
       return res.status(400).json({ message: "Create not Completed" });
     }

@@ -1,26 +1,15 @@
 import { Sequelize } from "sequelize-typescript";
+import dotenv from "dotenv";
+dotenv.config();
 
-const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: "stock.sqlite",
-  models: [__dirname + "/**/*.model.ts"],
-});
-
-// let db = {};
-
-// Add Model in db
-// fs.readdirSync(__dirname)
-//   .filter((file) => file != "index.ts")
-//   .forEach((file) => {
-//     const model = require(path.join(__dirname, file))(sequelize);
-//     db[model.name] = model;
-//   });
-
-// Init Associate
-// Object.keys(db).forEach((model) => {
-//   if (db[model].associate) {
-//     db[model].associate(db);
-//   }
-// });
+const sequelize = new Sequelize(
+  process.env.DATABASE,
+  process.env.DATABASE_USER,
+  process.env.DATABASE_PASSWORD,
+  {
+    dialect: "postgres",
+    models: [__dirname + "/**/*.model.ts"],
+  }
+);
 
 export default sequelize;

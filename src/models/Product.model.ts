@@ -28,14 +28,14 @@ export default class Product extends Model {
   isActive: string;
 
   @ForeignKey(() => Supplier)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   SupplierId: number;
 
   @BelongsTo(() => Supplier)
   supplier: Supplier;
 
   @ForeignKey(() => User)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   UserId: number;
 
   @BelongsTo(() => User)

@@ -14,31 +14,31 @@ import StockTransaction from "./StockTransaction.model";
 
 @Table
 export default class Stock extends Model {
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   minOrder: number;
 
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   orderQuantity: number;
 
   @Column(DataType.BOOLEAN)
   isAutoOrder: boolean;
 
   @ForeignKey(() => User)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   UserId: number;
 
   @BelongsTo(() => User)
   user: User;
 
   @ForeignKey(() => StockPlace)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   StockPlaceId: number;
 
   @BelongsTo(() => StockPlace)
   stockPlace: StockPlace;
 
   @ForeignKey(() => Product)
-  @Column(DataType.NUMBER)
+  @Column(DataType.INTEGER)
   ProductId: number;
 
   @BelongsTo(() => Product)
