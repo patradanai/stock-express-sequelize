@@ -1,8 +1,7 @@
 import { Response } from "express";
 import { ReqUser } from "../types/User";
-import db from "../models";
-const StockTransaction = db.StockTransaction;
-const StockTransactionType = db.StockTransactionType;
+import StockTransaction from "../models/StockTransaction.model";
+import StockTransactionType from "../models/StockTransactionType.model";
 
 // CRUD
 
@@ -32,7 +31,7 @@ const createStockTransaction = async (req: ReqUser, res: Response) => {
     const stockType = await StockTransactionType.findOne({
       where: { type: typeStock },
     });
-    await stockTransaction.setStockTransactionType(stockType);
+    await stockTransaction.$set("stockTransactionType", stockType);
     return res
       .status(200)
       .json({ message: "Completed Create StockTransaction" });
@@ -59,7 +58,7 @@ const updateStockTransaction = async (req: ReqUser, res: Response) => {
     const stockType = await StockTransactionType.findOne({
       where: { type: typeStock },
     });
-    await stockTransaction.setStockTransactionType(stockType);
+    await stockTransaction.$set("stockTransactionType", stockType);
   } catch (err) {
     return res.status(500).json({ Error: err.message });
   }

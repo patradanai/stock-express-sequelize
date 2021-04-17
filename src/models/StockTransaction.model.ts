@@ -1,59 +1,64 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import {
+  Model,
+  Column,
+  Table,
+  DataType,
+  BelongsTo,
+  ForeignKey,
+} from "sequelize-typescript";
+import User from "./User.model";
+import Stock from "./Stock.model";
+import StockTransactionType from "./StockTransactionType.model";
 
-module.exports = (sequelize: Sequelize) => {
-  class StockTransaction extends Model {
-    public id?: number;
-    public quantity: number;
-    public createdAt?: Date;
-    public updatedAt?: Date;
+@Table
+export default class StockTransaction extends Model {
+  @Column(DataType.NUMBER)
+  quantity: number;
 
-    static associate(models) {
-      StockTransaction.belongsTo(models.Stock, {
-        foreignKey: {
-          allowNull: false,
-        },
-      });
-      StockTransaction.belongsTo(models.User, {
-        foreignKey: {
-          allowNull: false,
-        },
-      });
-      StockTransaction.belongsTo(models.StockTransactionType, {
-        foreignKey: {
-          allowNull: true,
-        },
-      });
-    }
-  }
+  @ForeignKey(() => User)
+  @Column(DataType.NUMBER)
+  UserId: number;
 
-  StockTransaction.init(
-    { quantity: DataTypes.INTEGER },
-    { tableName: "StockTransactions", sequelize }
-  );
-  // const StockTransaction = sequelize.define(
-  //   "StockTransaction",
-  //   {
-  //     quantity: Sequelize.INTEGER,
-  //   },
-  //   {}
-  // );
+  @BelongsTo(() => User)
+  user: User;
 
-  // StockTransaction.associate = (models) => {
-  //   StockTransaction.belongsTo(models.Stock, {
-  //     foreignKey: {
-  //       allowNull: false,
-  //     },
-  //   });
-  //   StockTransaction.belongsTo(models.User, {
-  //     foreignKey: {
-  //       allowNull: false,
-  //     },
-  //   });
-  //   StockTransaction.belongsTo(models.StockTransactionType, {
-  //     foreignKey: {
-  //       allowNull: true,
-  //     },
-  //   });
-  // };
-  return StockTransaction;
-};
+  @ForeignKey(() => Stock)
+  @Column(DataType.NUMBER)
+  StockId: number;
+
+  @BelongsTo(() => Stock)
+  stock: Stock;
+
+  @ForeignKey(() => StockTransactionType)
+  @Column(DataType.NUMBER)
+  StockTransactionTypeId: number;
+
+  @BelongsTo(() => StockTransactionType)
+  stockTransactionType: StockTransactionType;
+}
+
+// const StockTransaction = sequelize.define(
+//   "StockTransaction",
+//   {
+//     quantity: Sequelize.INTEGER,
+//   },
+//   {}
+// );
+
+// StockTransaction.associate = (models) => {
+//   StockTransaction.belongsTo(models.Stock, {
+//     foreignKey: {
+//       allowNull: false,
+//     },
+//   });
+//   StockTransaction.belongsTo(models.User, {
+//     foreignKey: {
+//       allowNull: false,
+//     },
+//   });
+//   StockTransaction.belongsTo(models.StockTransactionType, {
+//     foreignKey: {
+//       allowNull: true,
+//     },
+//   });
+// };

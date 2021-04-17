@@ -1,27 +1,25 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import {
+  Model,
+  Column,
+  Table,
+  DataType,
+  BelongsToMany,
+} from "sequelize-typescript";
+import User from "./User.model";
+import UserRoles from "./UserRoles.model";
 
-module.exports = (sequelize: Sequelize) => {
-  class Role extends Model {
-    public id?: number;
-    public role: string;
-    public createdAt?: Date;
-    public updatedAt?: Date;
+@Table
+export default class Role extends Model {
+  @Column(DataType.TEXT)
+  role: string;
 
-    static associate(models) {
-      Role.belongsToMany(models.User, { through: "user_roles" });
-    }
-  }
+  @BelongsToMany(() => User, () => UserRoles)
+  users: User[];
+}
 
-  Role.init(
-    { role: { type: DataTypes.STRING } },
-    { tableName: "roles", sequelize }
-  );
-
-  // const Role = sequelize.define<RoleInstance>("Role", {
-  //   role: { type: Sequelize.STRING },
-  // });
-  // Role.associate = (models) => {
-  //   Role.belongsToMany(models.User, { through: "user_roles" });
-  // };
-  return Role;
-};
+// const Role = sequelize.define<RoleInstance>("Role", {
+//   role: { type: Sequelize.STRING },
+// });
+// Role.associate = (models) => {
+//   Role.belongsToMany(models.User, { through: "user_roles" });
+// };

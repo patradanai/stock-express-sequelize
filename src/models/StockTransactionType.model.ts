@@ -1,33 +1,40 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import {
+  Model,
+  Column,
+  Table,
+  HasMany,
+  BelongsTo,
+  ForeignKey,
+  DataType,
+} from "sequelize-typescript";
+import User from "./User.model";
+import StockTransaction from "./StockTransaction.model";
 
-module.exports = (sequelize: Sequelize) => {
-  class StockTransactionType extends Model {
-    public id?: number;
-    public StockTransactionType: string;
-    public createdAt?: Date;
-    public updatedAt?: Date;
+@Table
+export default class StockTransactionType extends Model {
+  @Column(DataType.TEXT)
+  type: string;
 
-    static associate(models) {
-      StockTransactionType.hasMany(models.StockTransaction);
-      StockTransactionType.belongsTo(models.User);
-    }
-  }
+  @ForeignKey(() => User)
+  @Column(DataType.NUMBER)
+  UserId: number;
 
-  StockTransactionType.init(
-    { StockTransactionType: DataTypes.STRING },
-    { tableName: "StockTransactionTypes", sequelize }
-  );
-  // const StockTransactionType = sequelize.define(
-  //   "StockTransactionType",
-  //   {
-  //     type: Sequelize.STRING,
-  //   },
-  //   {}
-  // );
+  @BelongsTo(() => User)
+  user: User;
 
-  // StockTransactionType.associate = (models) => {
-  //   StockTransactionType.hasMany(models.StockTransaction);
-  //   StockTransactionType.belongsTo(models.User);
-  // };
-  return StockTransactionType;
-};
+  @HasMany(() => StockTransaction)
+  stockTransactions: StockTransaction[];
+}
+
+// const StockTransactionType = sequelize.define(
+//   "StockTransactionType",
+//   {
+//     type: Sequelize.STRING,
+//   },
+//   {}
+// );
+
+// StockTransactionType.associate = (models) => {
+//   StockTransactionType.hasMany(models.StockTransaction);
+//   StockTransactionType.belongsTo(models.User);
+// };

@@ -1,5 +1,8 @@
-import express, { Application, Request, Response } from "express";
-import db from "./src/models";
+import express, { Application } from "express";
+import sequelize from "./src/models";
+import Role from "./src/models/Role.model";
+import StockTransactionType from "./src/models/StockTransactionType.model";
+import StatusOrder from "./src/models/StatusOrder.model";
 import Stock from "./src/routers/Stock.router";
 import Auth from "./src/routers/Auth.router";
 import cors from "cors";
@@ -14,17 +17,17 @@ app.use(cors());
 require("dotenv").config();
 
 (async () => {
-  await db.sequelize.sync({ force: true });
-  await db.Role.bulkCreate([
+  await sequelize.sync({ force: true });
+  await Role.bulkCreate([
     { role: "Administrator" },
     { role: "Moderator" },
     { role: "Customer" },
   ]);
-  await db.StockTransactionType.bulkCreate([
+  await StockTransactionType.bulkCreate([
     { type: "StockIn" },
     { type: "StockOut" },
   ]);
-  await db.StatusOrder.bulkCreate([
+  await StatusOrder.bulkCreate([
     { statusOrder: "HoldOn" },
     { statusOrder: "Processed" },
     { statusOrder: "Completed" },

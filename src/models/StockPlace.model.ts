@@ -1,33 +1,40 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import {
+  Model,
+  Column,
+  Table,
+  HasMany,
+  BelongsTo,
+  ForeignKey,
+  DataType,
+} from "sequelize-typescript";
+import User from "./User.model";
+import Stock from "./Stock.model";
 
-module.exports = (sequelize: Sequelize) => {
-  class StockPlace extends Model {
-    public id?: number;
-    public stockPlace: string;
-    public createdAt?: Date;
-    public updatedAt?: Date;
+@Table
+export default class StockPlace extends Model {
+  @Column(DataType.TEXT)
+  stockPlace: string;
 
-    static associate(models) {
-      StockPlace.hasMany(models.Stock);
-      StockPlace.belongsTo(models.User);
-    }
-  }
+  @ForeignKey(() => User)
+  @Column(DataType.NUMBER)
+  UserId: number;
 
-  StockPlace.init(
-    { stockPlace: DataTypes.STRING },
-    { tableName: "StockPlaces", sequelize }
-  );
-  // const StockPlace = sequelize.define(
-  //   "StockPlace",
-  //   {
-  //     stockPlace: Sequelize.STRING,
-  //   },
-  //   {}
-  // );
+  @BelongsTo(() => User)
+  user: User;
 
-  // StockPlace.associate = (models) => {
-  //   StockPlace.hasMany(models.Stock);
-  //   StockPlace.belongsTo(models.User);
-  // };
-  return StockPlace;
-};
+  @HasMany(() => Stock)
+  stocks: Stock[];
+}
+
+// const StockPlace = sequelize.define(
+//   "StockPlace",
+//   {
+//     stockPlace: Sequelize.STRING,
+//   },
+//   {}
+// );
+
+// StockPlace.associate = (models) => {
+//   StockPlace.hasMany(models.Stock);
+//   StockPlace.belongsTo(models.User);
+// };

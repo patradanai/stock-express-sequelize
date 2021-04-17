@@ -1,31 +1,23 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import { Model, Column, Table, HasMany, DataType } from "sequelize-typescript";
+import OrderProduct from "./OrderProduct.model";
 
-module.exports = (sequelize: Sequelize) => {
-  class StatusOrder extends Model {
-    public id?: number;
-    public statusOrder: string;
-    public createdAt?: Date;
-    public updatedAt?: Date;
+@Table
+export default class StatusOrder extends Model {
+  @Column(DataType.TEXT)
+  statusOrder: string;
 
-    static associate(models) {
-      StatusOrder.hasMany(models.OrderProduct);
-    }
-  }
+  @HasMany(() => OrderProduct)
+  orderProducts: OrderProduct[];
+}
 
-  StatusOrder.init(
-    { statusOrder: DataTypes.STRING },
-    { tableName: "StatusOrders", sequelize }
-  );
-  // const StatusOrder = sequelize.define(
-  //   "StatusOrder",
-  //   {
-  //     statusOrder: Sequelize.STRING,
-  //   },
-  //   {}
-  // );
+// const StatusOrder = sequelize.define(
+//   "StatusOrder",
+//   {
+//     statusOrder: Sequelize.STRING,
+//   },
+//   {}
+// );
 
-  // StatusOrder.associate = (models) => {
-  //   StatusOrder.hasMany(models.OrderProduct);
-  // };
-  return StatusOrder;
-};
+// StatusOrder.associate = (models) => {
+//   StatusOrder.hasMany(models.OrderProduct);
+// };

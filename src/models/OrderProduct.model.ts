@@ -1,36 +1,52 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import {
+  Table,
+  Column,
+  Model,
+  ForeignKey,
+  BelongsTo,
+  DataType,
+} from "sequelize-typescript";
+import User from "./User.model";
+import Product from "./Product.model";
+import StatusOrder from "./StatusOrder.model";
 
-module.exports = (sequelize: Sequelize) => {
-  class OrderProduct extends Model {
-    public id?: number;
-    public orderQuantity: string;
-    public createdAt?: Date;
-    public updatedAt?: Date;
+@Table
+export default class OrderProduct extends Model {
+  @Column(DataType.TEXT)
+  orderQuantity: string;
 
-    static associate(models) {
-      OrderProduct.belongsTo(models.Product);
-      OrderProduct.belongsTo(models.StatusOrder);
-      OrderProduct.belongsTo(models.User);
-    }
-  }
+  @ForeignKey(() => User)
+  @Column(DataType.NUMBER)
+  UserId: number;
 
-  OrderProduct.init(
-    { orderQuantity: DataTypes.INTEGER },
-    { tableName: "OrderProducts", sequelize }
-  );
+  @BelongsTo(() => User)
+  user: User;
 
-  // const OrderProduct = sequelize.define(
-  //   "OrderProduct",
-  //   {
-  //     orderQuantity: Sequelize.INTEGER,
-  //   },
-  //   {}
-  // );
+  @ForeignKey(() => Product)
+  @Column(DataType.NUMBER)
+  ProductId: number;
 
-  // OrderProduct.associate = (models) => {
-  //   OrderProduct.belongsTo(models.Product);
-  //   OrderProduct.belongsTo(models.StatusOrder);
-  //   OrderProduct.belongsTo(models.User);
-  // };
-  return OrderProduct;
-};
+  @BelongsTo(() => Product)
+  product: Product;
+
+  @ForeignKey(() => StatusOrder)
+  @Column(DataType.NUMBER)
+  StatusOrderId: number;
+
+  @BelongsTo(() => StatusOrder)
+  statusOrder: StatusOrder;
+}
+
+// const OrderProduct = sequelize.define(
+//   "OrderProduct",
+//   {
+//     orderQuantity: Sequelize.INTEGER,
+//   },
+//   {}
+// );
+
+// OrderProduct.associate = (models) => {
+//   OrderProduct.belongsTo(models.Product);
+//   OrderProduct.belongsTo(models.StatusOrder);
+//   OrderProduct.belongsTo(models.User);
+// };

@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { ReqUser } from "../types/User";
-import db from "../models";
-const Supplier = db.Supplier;
-const User = db.User;
+import Supplier from "../models/Supplier.model";
+import User from "../models/User.model";
 
 // Supplier API
 
@@ -11,7 +10,7 @@ const readSupplier = async (req: ReqUser, res: Response) => {
   const userId = req.userId;
   const resRead = await Supplier.findAll({
     where: { userId: userId },
-    include: [db.User],
+    include: [User],
   });
 
   return res.status(200).json(resRead);
@@ -43,7 +42,7 @@ const createSupplier = async (req: ReqUser, res: Response) => {
       return res.status(400).json({ message: "Create not Completed" });
     }
     // Set UserId is Instance
-    await resSupllier.setUser(userInstance);
+    await resSupllier.$set("user", userInstance);
 
     if (!created) {
       return res.status(400).json({ message: "Supplier Existing" });

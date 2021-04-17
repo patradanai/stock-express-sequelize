@@ -1,65 +1,74 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import {
+  Table,
+  Column,
+  Model,
+  HasMany,
+  HasOne,
+  BelongsTo,
+  ForeignKey,
+  DataType,
+} from "sequelize-typescript";
+import Supplier from "./Supplier.model";
+import User from "./User.model";
+import OrderProduct from "./OrderProduct.model";
+import Stock from "./Stock.model";
 
-module.exports = (sequelize: Sequelize) => {
-  class Product extends Model {
-    public id?: number;
-    public product: string;
-    public productDesc: string;
-    public productPrice: string;
-    public isActive: string;
-    public createdAt?: Date;
-    public updatedAt?: Date;
+@Table
+export default class Product extends Model {
+  @Column(DataType.TEXT)
+  product: string;
 
-    static associate(models) {
-      Product.belongsTo(models.Supplier, {
-        foreignKey: {
-          allowNull: false,
-        },
-      });
-      Product.hasMany(models.OrderProduct);
-      Product.hasOne(models.Stock);
-      Product.belongsTo(models.User, {
-        foreignKey: {
-          allowNull: false,
-        },
-      });
-    }
-  }
+  @Column(DataType.TEXT)
+  productDesc: string;
 
-  Product.init(
-    {
-      product: DataTypes.STRING,
-      productDesc: DataTypes.STRING,
-      productPrice: DataTypes.STRING,
-      isActive: DataTypes.BOOLEAN,
-    },
-    { tableName: "Products", sequelize }
-  );
+  @Column(DataType.TEXT)
+  productPrice: string;
 
-  // const Product = sequelize.define(
-  //   "Product",
-  //   {
-  //     product: Sequelize.STRING,
-  //     productDesc: Sequelize.STRING,
-  //     productPrice: Sequelize.STRING,
-  //     isActive: Sequelize.BOOLEAN,
-  //   },
-  //   {}
-  // );
-  // Product.associate = (models) => {
-  //   Product.belongsTo(models.Supplier, {
-  //     foreignKey: {
-  //       allowNull: false,
-  //     },
-  //   });
-  //   Product.hasMany(models.OrderProduct);
-  //   Product.hasOne(models.Stock);
-  //   Product.belongsTo(models.User, {
-  //     foreignKey: {
-  //       allowNull: false,
-  //     },
-  //   });
-  // };
+  @Column(DataType.TEXT)
+  isActive: string;
 
-  return Product;
-};
+  @ForeignKey(() => Supplier)
+  @Column(DataType.NUMBER)
+  SupplierId: number;
+
+  @BelongsTo(() => Supplier)
+  supplier: Supplier;
+
+  @ForeignKey(() => User)
+  @Column(DataType.NUMBER)
+  UserId: number;
+
+  @BelongsTo(() => User)
+  user: User;
+
+  @HasMany(() => OrderProduct)
+  orderProducts: OrderProduct[];
+
+  @HasOne(() => Stock)
+  stock: Stock;
+}
+
+// const Product = sequelize.define(
+//   "Product",
+//   {
+//     product: Sequelize.STRING,
+//     productDesc: Sequelize.STRING,
+//     productPrice: Sequelize.STRING,
+//     isActive: Sequelize.BOOLEAN,
+//   },
+//   {}
+// );
+// Product.associate = (models) => {
+//   Product.belongsTo(models.Supplier, {
+//     foreignKey: {
+//       allowNull: false,
+//     },
+//   });
+//   Product.hasMany(models.OrderProduct);
+//   Product.hasOne(models.Stock);
+//   Product.belongsTo(models.User, {
+//     foreignKey: {
+//       allowNull: false,
+//     },
+//   });
+// };

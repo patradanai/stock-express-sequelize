@@ -1,7 +1,7 @@
 import { Response } from "express";
 import db from "../models";
 import { ReqUser } from "../types/User";
-const StockPlace = db.StockPlace;
+import StockPlace from "../models/StockPlace.model";
 
 // CRUD
 

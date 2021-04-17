@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import db from "../models";
 import { ReqUser } from "../types/User";
-const Product = db.Product;
-const User = db.User;
-const Supplier = db.Supplier;
-const Stock = db.Stock;
+import Product from "../models/Product.model";
+import User from "../models/User.model";
+import Supplier from "../models/Supplier.model";
+import Stock from "../models/Stock.model";
 // CRUD
 
 const readProducts = async (req: ReqUser, res: Response) => {
@@ -51,7 +51,7 @@ const createProduct = async (req: ReqUser, res: Response) => {
         isActive: isActive,
         UserId: userInstance.id,
         SupplierId: supplierInstance.id,
-        Stock: {
+        stock: {
           UserId: userInstance.id,
           minOrder: minOrder,
           orderQuantity: orderQuantity,
@@ -62,7 +62,6 @@ const createProduct = async (req: ReqUser, res: Response) => {
       },
       {
         include: [Stock],
-        as: "Stock",
       }
     );
     if (!productCreate) {

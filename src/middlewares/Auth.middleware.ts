@@ -1,12 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import db from "../models";
 import { decodeSession } from "../functions/_jwt";
 import { ReqUser } from "../types/User";
-const User = db.User;
+import User from "../models/User.model";
 
 const isExistUser = async (req: Request, res: Response, next: NextFunction) => {
   const { username } = req.body;
-  const reqUser = await User.findOne({ username: username });
+  const reqUser = await User.findOne({ where: { username: username } });
   if (!reqUser) {
     return res.status(400).json({ message: "User exsting" });
   }

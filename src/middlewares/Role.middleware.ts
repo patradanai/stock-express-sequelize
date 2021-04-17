@@ -1,13 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { ReqUser } from "../types/User";
-import db from "../models";
-const User = db.User;
+import User from "../models/User.model";
 
-const checkRole = (roles: string[]) => {
+const checkRole = (roles) => {
   return async (req: ReqUser, res: Response, next: NextFunction) => {
     const id = req.userId;
 
-    const userCB = await User.findByPk({ id, include: "Role" });
+    const userCB = await User.findByPk(id, { include: "Role" });
     if (!userCB) {
       return res.status(400).json({ message: "Can't Check Role" });
     }

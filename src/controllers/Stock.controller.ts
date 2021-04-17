@@ -2,9 +2,9 @@ import Sequelize from "sequelize";
 import { Response } from "express";
 import { ReqUser } from "../types/User";
 import db from "../models";
-const Stock = db.Stock;
-const StockTransaction = db.StockTransaction;
-const StockTransactionType = db.StockTransactionType;
+import Stock from "../models/Stock.model";
+import StockTransaction from "../models/StockTransaction.model";
+import StockTransactionType from "../models/StockTransactionType.model";
 // CRUD
 
 // Get by id
@@ -13,7 +13,6 @@ const readStock = async (req: ReqUser, res: Response) => {
   const { id } = req.params;
   try {
     const stock = await Stock.findByPk(id, {
-      duplicating: false,
       group: [],
       attributes: {
         include: [
@@ -63,7 +62,7 @@ const readStocks = async (req: ReqUser, res: Response) => {
   try {
     const stocks = await Stock.findAll({
       where: { userId: userId },
-      duplicating: false,
+
       group: [],
       attributes: {
         include: [

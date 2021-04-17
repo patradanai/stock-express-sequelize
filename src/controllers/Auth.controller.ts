@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import db from "../models";
 import bcrypt from "bcrypt";
 import { encodeSession } from "../functions/_jwt";
-const User = db.User;
-const Role = db.Role;
+import User from "../models/User.model";
+import Role from "../models/Role.model";
 
 const SignIn = async (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -55,7 +55,7 @@ const SignUp = async (req: Request, res: Response) => {
     }
     // Setting Role with Special Method ORM
     const roleCB = await Role.findAll({ where: { role: "Customer" } });
-    if (roleCB) userCrate.setRoles(roleCB);
+    if (roleCB) userCrate.$set("roles", roleCB);
 
     return res.status(201).json({ message: "Register Completed" });
   } catch (err) {

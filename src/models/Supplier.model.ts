@@ -1,42 +1,57 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import {
+  Table,
+  Column,
+  Model,
+  BelongsTo,
+  ForeignKey,
+  DataType,
+} from "sequelize-typescript";
+import User from "./User.model";
 
-module.exports = (sequelize: Sequelize) => {
-  class Supplier extends Model {
-    public id?: number;
-    public supplier: string;
-    public phone: string;
-    public email: string;
-    public createdAt?: Date;
-    public updatedAt?: Date;
+@Table
+export default class Supplier extends Model {
+  @Column(DataType.TEXT)
+  supplier: string;
 
-    static associate(models) {
-      Supplier.hasMany(models.Product);
-      Supplier.belongsTo(models.User);
-    }
-  }
+  @Column(DataType.TEXT)
+  phone: string;
 
-  Supplier.init(
-    {
-      supplier: DataTypes.STRING,
-      phone: DataTypes.STRING,
-      email: DataTypes.STRING,
-    },
-    { tableName: "Suppliers", sequelize }
-  );
+  @Column(DataType.TEXT)
+  email: string;
 
-  // const Supplier = sequelize.define(
-  //   "Supplier",
-  //   {
-  //     supplier: Sequelize.STRING,
-  //     phone: Sequelize.STRING,
-  //     email: Sequelize.STRING,
-  //   },
-  //   {}
-  // );
+  @ForeignKey(() => User)
+  @Column(DataType.NUMBER)
+  UserId: number;
 
-  // Supplier.associate = (models) => {
+  @BelongsTo(() => User)
+  user: User;
+
+  // static associate(models) {
   //   Supplier.hasMany(models.Product);
   //   Supplier.belongsTo(models.User);
-  // };
-  return Supplier;
-};
+  // }
+}
+
+// Supplier.init(
+//   {
+//     supplier: DataType.STRING,
+//     phone: DataType.STRING,
+//     email: DataType.STRING,
+//   },
+//   { tableName: "Suppliers", sequelize }
+// );
+
+// const Supplier = sequelize.define(
+//   "Supplier",
+//   {
+//     supplier: Sequelize.STRING,
+//     phone: Sequelize.STRING,
+//     email: Sequelize.STRING,
+//   },
+//   {}
+// );
+
+// Supplier.associate = (models) => {
+//   Supplier.hasMany(models.Product);
+//   Supplier.belongsTo(models.User);
+// };

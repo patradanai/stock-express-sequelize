@@ -1,53 +1,71 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import {
+  Model,
+  Column,
+  Table,
+  BelongsToMany,
+  DataType,
+  HasMany,
+} from "sequelize-typescript";
+import Supplier from "./Supplier.model";
+import UserRoles from "./UserRoles.model";
+import Role from "./Role.model";
 
-module.exports = (sequelize: Sequelize) => {
-  class User extends Model {
-    public id?: number;
-    public firstname: string;
-    public lastname: string;
-    public email: string;
-    public username: string;
-    public password: string;
-    public createdAt?: Date;
-    public updatedAt?: Date;
+@Table({ tableName: "Users" })
+export default class User extends Model {
+  @Column(DataType.TEXT)
+  firstname: string;
 
-    static associate(models) {
-      User.belongsToMany(models.Role, { through: "user_roles" });
-    }
-  }
+  @Column(DataType.TEXT)
+  lastname: string;
 
-  User.init(
-    {
-      firstname: DataTypes.STRING,
-      lastname: DataTypes.STRING,
-      email: DataTypes.STRING,
-      username: DataTypes.STRING,
-      password: DataTypes.STRING,
-    },
-    { tableName: "Users", sequelize }
-  );
+  @Column(DataType.TEXT)
+  nicename: string;
 
-  // const User = sequelize.define(
-  //   "User",
-  //   {
-  //     firstname: Sequelize.STRING,
-  //     lastname: Sequelize.STRING,
-  //     email: Sequelize.STRING,
-  //     username: Sequelize.STRING,
-  //     password: Sequelize.STRING,
-  //   },
-  //   {}
-  // );
-  // User.associate = (models) => {
-  //   User.belongsToMany(models.Role, { through: "user_roles" });
-  //   User.hasMany(models.StockTransactionType);
-  //   User.hasMany(models.Product);
-  //   User.hasMany(models.Supplier);
-  //   User.hasMany(models.StockPlace);
-  //   User.hasMany(models.Supplier);
-  //   User.hasMany(models.Stock);
-  //   User.hasMany(models.OrderProduct);
-  // };
+  @Column(DataType.TEXT)
+  email: string;
 
-  return User;
-};
+  @Column(DataType.TEXT)
+  username: string;
+
+  @Column(DataType.TEXT)
+  password: string;
+
+  @HasMany(() => Supplier)
+  suppliers: Supplier[];
+
+  @BelongsToMany(() => Role, () => UserRoles)
+  roles: Role[];
+}
+
+// User.init(
+//   {
+//     firstname: DataTypes.STRING,
+//     lastname: DataTypes.STRING,
+//     email: DataTypes.STRING,
+//     username: DataTypes.STRING,
+//     password: DataTypes.STRING,
+//   },
+//   { tableName: "Users", sequelize }
+// );
+
+// const User = sequelize.define(
+//   "User",
+//   {
+//     firstname: Sequelize.STRING,
+//     lastname: Sequelize.STRING,
+//     email: Sequelize.STRING,
+//     username: Sequelize.STRING,
+//     password: Sequelize.STRING,
+//   },
+//   {}
+// );
+// User.associate = (models) => {
+//   User.belongsToMany(models.Role, { through: "user_roles" });
+//   User.hasMany(models.StockTransactionType);
+//   User.hasMany(models.Product);
+//   User.hasMany(models.Supplier);
+//   User.hasMany(models.StockPlace);
+//   User.hasMany(models.Supplier);
+//   User.hasMany(models.Stock);
+//   User.hasMany(models.OrderProduct);
+// };
