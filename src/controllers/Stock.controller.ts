@@ -73,7 +73,7 @@ const readStocks = async (req: ReqUser, res: Response) => {
             Sequelize.fn(
               "SUM",
               Sequelize.literal(
-                "(CASE `StockTransactions->StockTransactionType`.`type` WHEN 'StockIn' THEN StockTransactions.quantity ELSE StockTransactions.quantity*-1 END)"
+                "(CASE `stockTransactions->stockTransactionType`.`type` WHEN 'StockIn' THEN stockTransactions.quantity ELSE stockTransactions.quantity*-1 END)"
               )
             ),
             "Quantity",
@@ -82,7 +82,7 @@ const readStocks = async (req: ReqUser, res: Response) => {
       },
       include: {
         model: StockTransaction,
-        as: "StockTransactions",
+        as: "stockTransactions",
         attributes: [],
         required: false,
         include: [
